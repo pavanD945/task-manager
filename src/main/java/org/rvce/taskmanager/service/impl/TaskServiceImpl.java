@@ -56,8 +56,12 @@ public class TaskServiceImpl implements TaskService {
             throw new ResourceNotFoundException("Task id does not exist. ID = " + id);
         } else {
             Task task = taskDTOFromDB.get();
-            task.setDescription(taskDTO.getDescription());
-            task.setStatus(taskDTO.getStatus());
+            if (task.getDescription() != null) {
+                task.setDescription(taskDTO.getDescription());
+            }
+            if (taskDTO.getStatus() != null) {
+                task.setStatus(taskDTO.getStatus());
+            }
             taskDTOUpdated = TaskMapper.toDTO(taskRepository.save(task));
         }
         return taskDTOUpdated;
@@ -70,5 +74,14 @@ public class TaskServiceImpl implements TaskService {
             return null;
         }
         return TaskMapper.toDTO(task);
+    }
+
+    @Override
+    public List<TaskDTO> findByStatus(String status) {
+        List<Task> tasks = taskRepository.findByStatus(TaskStatus.valueOf(status));
+        if (tasks == null) {
+            return null;
+        }
+        return TaskMapper.toDTOList(tasks);
     }
 }

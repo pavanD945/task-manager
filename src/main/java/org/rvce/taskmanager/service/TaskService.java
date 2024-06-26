@@ -15,4 +15,6 @@ public interface TaskService {
     TaskDTO update(Long id, TaskDTO taskDTO);
 
     TaskDTO findByName(String name);
+
+    List<TaskDTO> findByStatus(String status);
 }
